@@ -29,7 +29,25 @@ import {
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((s) => s.login);
+  const lockedUntil = useAuthStore((s) => s.lockedUntil);
   const log = useActivityStore((s) => s.log);
+
+  // Live lockout countdown so users know when they can retry.
+  const [lockRemaining, setLockRemaining] = React.useState(0);
+  React.useEffect(() => {
+    if (!lockedUntil) {
+      setLockRemaining(0);
+      return;
+    }
+    const tick = () =>
+      setLockRemaining(
+        Math.max(0, Math.ceil((lockedUntil - Date.now()) / 1000)),
+      );
+    tick();
+    const id = setInterval(tick, 500);
+    return () => clearInterval(id);
+  }, [lockedUntil]);
+  const locked = lockRemaining > 0;
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -133,12 +151,18 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isSubmitting || locked}
+          >
             {isSubmitting ? (
               <>
                 <Loader2 className="animate-spin" />
                 Signing in…
               </>
+            ) : locked ? (
+              `Locked — retry in ${lockRemaining}s`
             ) : (
               "Sign in"
             )}

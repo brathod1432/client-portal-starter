@@ -4,11 +4,13 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Plus, Paperclip, Search } from "lucide-react";
+import { Plus, Paperclip, Search, FileDown } from "lucide-react";
+import { toast } from "sonner";
 
 import type { Ticket, TicketStatus } from "@/lib/types";
 import { useTicketStore } from "@/stores/ticket-store";
 import { formatRelativeTime } from "@/lib/format";
+import { downloadCsv } from "@/lib/download";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { DataTable } from "@/components/shared/data-table";
@@ -89,19 +91,41 @@ export default function TicketsPage() {
     return matchesQuery && matchesStatus;
   });
 
+  function exportCsv() {
+    downloadCsv(
+      filtered.map((t) => ({
+        reference: t.reference,
+        subject: t.subject,
+        status: t.status,
+        priority: t.priority,
+        category: t.category,
+        requester: t.requester,
+        assignee: t.assignee ?? "",
+        updated: t.updatedAt,
+      })),
+      "tickets.csv",
+    );
+    toast.success("Exported tickets.csv");
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Support tickets"
         description="Raise, track and resolve support requests."
         actions={
-          <Can permission="tickets:create">
-            <Button asChild>
-              <Link href="/tickets/new">
-                <Plus /> New ticket
-              </Link>
+          <>
+            <Button variant="outline" onClick={exportCsv}>
+              <FileDown /> Export CSV
             </Button>
-          </Can>
+            <Can permission="tickets:create">
+              <Button asChild>
+                <Link href="/tickets/new">
+                  <Plus /> New ticket
+                </Link>
+              </Button>
+            </Can>
+          </>
         }
       />
 

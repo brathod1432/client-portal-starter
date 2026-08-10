@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Loader2, Paperclip } from "lucide-react";
+import { Loader2, Paperclip, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { createTicketSchema, type CreateTicketInput } from "@/lib/validations";
@@ -13,6 +13,7 @@ import { useTicketStore } from "@/stores/ticket-store";
 import { useActivityStore } from "@/stores/activity-store";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { PageHeader } from "@/components/shared/page-header";
+import { formatFileSize } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,6 +41,11 @@ export default function NewTicketPage() {
   const create = useTicketStore((s) => s.create);
   const log = useActivityStore((s) => s.log);
 
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [attachments, setAttachments] = React.useState<
+    { name: string; sizeKb: number }[]
+  >([]);
+
   const form = useForm<CreateTicketInput>({
     resolver: zodResolver(createTicketSchema),
     defaultValues: {
@@ -50,8 +56,38 @@ export default function NewTicketPage() {
     },
   });
 
+  function onFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    const allowed = /\.(pdf|png|jpe?g|docx?|xlsx?|txt|zip)$/i;
+    const next: { name: string; sizeKb: number }[] = [];
+    for (const f of files) {
+      if (!allowed.test(f.name)) {
+        toast.error(`${f.name}: unsupported file type`);
+        continue;
+      }
+      if (f.size > 10 * 1024 * 1024) {
+        toast.error(`${f.name}: exceeds 10 MB`);
+        continue;
+      }
+      next.push({
+        name: f.name,
+        sizeKb: Math.max(1, Math.round(f.size / 1024)),
+      });
+    }
+    setAttachments((prev) => [...prev, ...next].slice(0, 5));
+    e.target.value = "";
+  }
+
+  function removeAttachment(name: string) {
+    setAttachments((prev) => prev.filter((a) => a.name !== name));
+  }
+
   function onSubmit(values: CreateTicketInput) {
-    const ticket = create({ ...values, requester: user?.name ?? "You" });
+    const ticket = create({
+      ...values,
+      requester: user?.name ?? "You",
+      attachments,
+    });
     log("ticket_create", user?.name ?? "You", ticket.reference, {
       priority: values.priority,
     });
@@ -178,13 +214,51 @@ export default function NewTicketPage() {
                 )}
               />
 
-              {/* Attachment placeholder — see docs/security-implementation.md (Secure File Upload) */}
-              <div className="text-muted-foreground flex items-center gap-3 rounded-lg border border-dashed p-4 text-sm">
-                <Paperclip className="h-4 w-4" />
-                <span>
-                  Attachments will be supported here. Uploads are validated,
-                  size-limited and virus-scanned server-side before storage.
-                </span>
+              {/* Attachments — client-side validation only; a backend must
+                  re-validate, size-limit and virus-scan. See
+                  docs/security-implementation.md (Secure File Upload). */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Attachments</p>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="hover:bg-accent/50 focus-visible:ring-ring flex w-full items-center justify-center gap-2 rounded-lg border border-dashed p-4 text-sm focus-visible:ring-2 focus-visible:outline-none"
+                >
+                  <Upload className="h-4 w-4" />
+                  Add files (PDF, image, doc, zip · up to 5, 10 MB each)
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  className="sr-only"
+                  aria-hidden="true"
+                  onChange={onFilesSelected}
+                />
+                {attachments.length > 0 ? (
+                  <ul className="space-y-1.5">
+                    {attachments.map((a) => (
+                      <li
+                        key={a.name}
+                        className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                      >
+                        <Paperclip className="text-muted-foreground h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">{a.name}</span>
+                        <span className="text-muted-foreground ml-auto text-xs">
+                          {formatFileSize(a.sizeKb)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeAttachment(a.name)}
+                          aria-label={`Remove ${a.name}`}
+                          className="text-muted-foreground hover:text-foreground rounded p-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
 
               <div className="flex justify-end gap-2">

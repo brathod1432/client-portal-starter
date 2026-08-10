@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import {
@@ -73,10 +74,18 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const log = useActivityStore((s) => s.log);
   const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+  const router = useRouter();
 
   function toggle(key: keyof typeof settings, value: boolean) {
     settings.update({ [key]: value });
     log("settings_update", user?.name ?? "You", key as string);
+  }
+
+  function signOutEverywhere() {
+    log("logout", user?.name ?? "You", "All sessions revoked");
+    logout();
+    router.replace("/login");
   }
 
   return (
@@ -106,11 +115,16 @@ export default function SettingsPage() {
           <ChangePasswordCard />
 
           <Card>
-            <CardHeader>
-              <CardTitle>Active sessions</CardTitle>
-              <CardDescription>
-                Devices currently signed in to your account.
-              </CardDescription>
+            <CardHeader className="flex-row items-start justify-between space-y-0">
+              <div className="space-y-1.5">
+                <CardTitle>Active sessions</CardTitle>
+                <CardDescription>
+                  Devices currently signed in to your account.
+                </CardDescription>
+              </div>
+              <Button variant="outline" size="sm" onClick={signOutEverywhere}>
+                Sign out everywhere
+              </Button>
             </CardHeader>
             <CardContent className="space-y-3">
               {sessions.map((s) => {

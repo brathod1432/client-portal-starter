@@ -9,6 +9,7 @@ import {
   Send,
   UserPlus,
   CheckCircle2,
+  Star,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -16,7 +17,7 @@ import type { TicketStatus } from "@/lib/types";
 import { useTicketStore } from "@/stores/ticket-store";
 import { useAuthStore } from "@/stores/auth-store";
 import { useActivityStore } from "@/stores/activity-store";
-import { formatDateTime, initials } from "@/lib/format";
+import { formatDateTime, formatFileSize, initials } from "@/lib/format";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -44,6 +45,7 @@ export default function TicketDetailPage({
   const addComment = useTicketStore((s) => s.addComment);
   const setStatus = useTicketStore((s) => s.setStatus);
   const assign = useTicketStore((s) => s.assign);
+  const rate = useTicketStore((s) => s.rate);
   const user = useAuthStore((s) => s.user);
   const log = useActivityStore((s) => s.log);
   const [comment, setComment] = React.useState("");
@@ -97,16 +99,68 @@ export default function TicketDetailPage({
                 {ticket.description}
               </p>
               {ticket.hasAttachments ? (
-                <div className="mt-4 flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-                  <Paperclip className="text-muted-foreground h-4 w-4" />
-                  switch-logs.txt
-                  <span className="text-muted-foreground ml-auto text-xs">
-                    42 KB
-                  </span>
+                <div className="mt-4 space-y-1.5">
+                  {(ticket.attachments?.length
+                    ? ticket.attachments
+                    : [{ name: "switch-logs.txt", sizeKb: 42 }]
+                  ).map((a) => (
+                    <div
+                      key={a.name}
+                      className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                    >
+                      <Paperclip className="text-muted-foreground h-4 w-4" />
+                      <span className="truncate">{a.name}</span>
+                      <span className="text-muted-foreground ml-auto text-xs">
+                        {formatFileSize(a.sizeKb)}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               ) : null}
             </CardContent>
           </Card>
+
+          {ticket.status === "resolved" || ticket.status === "closed" ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>How did we do?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {ticket.satisfaction ? (
+                  <p className="text-muted-foreground text-sm">
+                    Thanks for your feedback — you rated this{" "}
+                    <span className="text-foreground font-medium">
+                      {ticket.satisfaction}/5
+                    </span>
+                    .
+                  </p>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <button
+                        key={n}
+                        type="button"
+                        aria-label={`Rate ${n} out of 5`}
+                        onClick={() => {
+                          rate(ticket.id, n);
+                          log(
+                            "ticket_update",
+                            user?.name ?? "You",
+                            ticket.reference,
+                            { satisfaction: String(n) },
+                          );
+                          toast.success("Thanks for your feedback!");
+                        }}
+                        className="text-muted-foreground hover:text-warning focus-visible:ring-ring rounded p-1 focus-visible:ring-2 focus-visible:outline-none"
+                      >
+                        <Star className="h-6 w-6" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ) : null}
 
           <Card>
             <CardHeader>

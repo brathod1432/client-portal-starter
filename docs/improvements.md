@@ -7,10 +7,21 @@
 
 ---
 
-## Recently shipped (user-experience & security round)
+## Recently shipped (user-experience & security)
 
-The following user-first improvements were implemented in this round (see
+The following user-first improvements are implemented (see
 [`CHANGELOG.md`](../CHANGELOG.md)):
+
+**Round 2**
+
+- **Security/trust:** login lockout live countdown, "last sign-in" indicator
+  ("not you?"), sign-out-of-all-devices, `/.well-known/security.txt`, copy
+  buttons for 2FA secret & recovery codes.
+- **Deployment:** installable PWA manifest, `robots` rules.
+- **Productivity:** real ticket attachments (validated), ticket CSAT rating,
+  tickets CSV export.
+
+**Round 1**
 
 - **Security:** login rate-limiting/lockout, change-password flow, real 2FA
   setup (verification + recovery codes), password show/hide, idle-timeout
@@ -184,6 +195,9 @@ Security is the #1 priority. The starter ships a strong **client** posture and
 | P2       | Optimistic updates + undo                                          | UX       | ▶       |
 | P2       | i18n, chart SR fallbacks                                           | A11y/UX  | ▶       |
 | P2       | Download my data (GDPR export), consent banner                     | UX/Legal | ✅ done |
+| P2       | Login lockout countdown, last-sign-in, sign-out-everywhere         | Security | ✅ done |
+| P2       | security.txt, PWA manifest, robots                                 | Deploy   | ✅ done |
+| P2       | Ticket attachments, CSAT rating, tickets CSV export                | UX       | ✅ done |
 | P3       | Onboarding checklist, keyboard-shortcuts help                      | UX       | ✅ done |
 | P3       | Guided product tour, customizable dashboard                        | UX       | ▶       |
 | —        | Command palette, real actions, filters, idle-logout, a11y, exports | Multiple | ✅ done |

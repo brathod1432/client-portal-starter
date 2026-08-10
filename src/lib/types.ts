@@ -75,6 +75,9 @@ export interface Ticket {
   updatedAt: string;
   timeline: TicketEvent[];
   hasAttachments: boolean;
+  attachments?: { name: string; sizeKb: number }[];
+  /** Customer satisfaction rating (1-5) captured after resolution. */
+  satisfaction?: number;
 }
 
 export type DocumentCategory =

@@ -15,6 +15,7 @@ interface NewTicket {
   category: TicketCategory;
   priority: Priority;
   requester: string;
+  attachments?: { name: string; sizeKb: number }[];
 }
 
 interface TicketState {
@@ -23,6 +24,7 @@ interface TicketState {
   addComment: (id: string, author: string, message: string) => void;
   setStatus: (id: string, status: TicketStatus, author: string) => void;
   assign: (id: string, assignee: string, author: string) => void;
+  rate: (id: string, satisfaction: number) => void;
 }
 
 let counter = 1043;
@@ -52,7 +54,8 @@ export const useTicketStore = create<TicketState>((set) => ({
       assignee: undefined,
       createdAt: now,
       updatedAt: now,
-      hasAttachments: false,
+      hasAttachments: Boolean(input.attachments?.length),
+      attachments: input.attachments ?? [],
       timeline: [event],
     };
     set((state) => ({ tickets: [ticket, ...state.tickets] }));
@@ -129,6 +132,14 @@ export const useTicketStore = create<TicketState>((set) => ({
               ],
             }
           : t,
+      ),
+    }));
+  },
+
+  rate(id, satisfaction) {
+    set((state) => ({
+      tickets: state.tickets.map((t) =>
+        t.id === id ? { ...t, satisfaction } : t,
       ),
     }));
   },

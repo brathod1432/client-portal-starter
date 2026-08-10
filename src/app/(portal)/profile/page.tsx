@@ -7,10 +7,12 @@ import { toast } from "sonner";
 import { Camera } from "lucide-react";
 
 import { profileSchema, type ProfileInput } from "@/lib/validations";
+import Link from "next/link";
+
 import { useAuthStore } from "@/stores/auth-store";
 import { useActivityStore } from "@/stores/activity-store";
 import { ROLE_LABELS } from "@/lib/rbac";
-import { initials, formatDate } from "@/lib/format";
+import { initials, formatDate, formatDateTime } from "@/lib/format";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +56,15 @@ export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
   const updateProfile = useAuthStore((s) => s.updateProfile);
   const log = useActivityStore((s) => s.log);
+  const events = useActivityStore((s) => s.events);
+
+  const lastLogin = React.useMemo(() => {
+    const logins = events.filter(
+      (e) => e.action === "login" && e.actor === user?.name,
+    );
+    // Prefer the previous login (not the current session) when available.
+    return logins[1] ?? logins[0];
+  }, [events, user?.name]);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -140,6 +151,20 @@ export default function ProfilePage() {
             <p className="text-muted-foreground mt-4 text-xs">
               Member since {formatDate(user.createdAt)}
             </p>
+            {lastLogin ? (
+              <div className="mt-4 w-full rounded-lg border p-3 text-left">
+                <p className="text-xs font-medium">Last sign-in</p>
+                <p className="text-muted-foreground mt-0.5 text-xs">
+                  {formatDateTime(lastLogin.timestamp)} · {lastLogin.device}
+                </p>
+                <Link
+                  href="/activity-log"
+                  className="text-primary mt-1 inline-block text-xs hover:underline"
+                >
+                  Not you? Review account activity
+                </Link>
+              </div>
+            ) : null}
           </CardContent>
         </Card>
 

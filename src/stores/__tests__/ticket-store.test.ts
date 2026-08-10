@@ -39,4 +39,23 @@ describe("ticket store", () => {
     expect(types).toContain("comment");
     expect(types).toContain("resolution");
   });
+
+  it("stores attachments and a satisfaction rating", () => {
+    const ticket = useTicketStore.getState().create({
+      subject: "Broken export button",
+      description: "The CSV export button does nothing when I click it.",
+      category: "technical",
+      priority: "low",
+      requester: "Ava Thompson",
+      attachments: [{ name: "screenshot.png", sizeKb: 120 }],
+    });
+    expect(ticket.hasAttachments).toBe(true);
+    expect(ticket.attachments).toHaveLength(1);
+
+    useTicketStore.getState().rate(ticket.id, 5);
+    const rated = useTicketStore
+      .getState()
+      .tickets.find((t) => t.id === ticket.id)!;
+    expect(rated.satisfaction).toBe(5);
+  });
 });

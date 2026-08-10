@@ -3,7 +3,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { KeyRound, Lock, ShieldCheck } from "lucide-react";
+import { Copy, KeyRound, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { twoFactorSchema, type TwoFactorInput } from "@/lib/validations";
@@ -72,6 +72,15 @@ export function TwoFactorCard() {
     toast.success("Two-factor authentication disabled");
   }
 
+  async function copy(text: string, label: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(`${label} copied`);
+    } catch {
+      toast.error("Couldn't copy to clipboard");
+    }
+  }
+
   return (
     <>
       <Card>
@@ -132,6 +141,14 @@ export function TwoFactorCard() {
               <code className="bg-muted rounded px-1.5 py-0.5">
                 {DEMO_SECRET}
               </code>
+              <button
+                type="button"
+                onClick={() => copy(DEMO_SECRET, "Secret")}
+                aria-label="Copy setup secret"
+                className="text-muted-foreground hover:text-foreground rounded p-1"
+              >
+                <Copy className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
 
@@ -192,6 +209,12 @@ export function TwoFactorCard() {
             ))}
           </ul>
           <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => copy(RECOVERY_CODES.join("\n"), "Recovery codes")}
+            >
+              <Copy /> Copy codes
+            </Button>
             <Button onClick={() => setShowRecovery(false)}>
               I&apos;ve saved them
             </Button>

@@ -5,6 +5,32 @@ based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — user-experience & security round 2
+
+**Security & trust**
+
+- **Login lockout live countdown** — the sign-in button disables and shows
+  "retry in Ns" while locked, on top of the existing attempt limiter.
+- **"Last sign-in" indicator** on the profile ("Not you? Review activity") so
+  users can spot unfamiliar access.
+- **Sign out of all devices** (Settings → Active sessions).
+- **`/.well-known/security.txt`** (RFC 9116) vulnerability-disclosure contact.
+- **Copy buttons** for the 2FA setup secret and recovery codes.
+
+**Real-world / deployment**
+
+- **PWA web app manifest** (installable) via `app/manifest.ts`.
+- **`robots`** rules (`app/robots.ts`) — index public auth pages, disallow the
+  authenticated portal.
+
+**Productivity**
+
+- **Ticket attachments** — real client-side file selection (type/size checked)
+  on ticket creation, listed on the ticket detail; a backend must re-validate
+  and virus-scan.
+- **Ticket satisfaction (CSAT)** — a 1-5 rating on resolved/closed tickets.
+- **Tickets CSV export** (consistent with invoices & activity log).
+
 ### Added — user-experience & security round
 
 Practical, real-world improvements driven by a user-first review (see

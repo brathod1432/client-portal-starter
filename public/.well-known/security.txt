@@ -1,0 +1,11 @@
+# Vulnerability disclosure policy (RFC 9116)
+# Replace the placeholder contacts with your real security channel before deploy.
+
+Contact: mailto:security@example.com
+Expires: 2027-01-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://example.com/.well-known/security.txt
+Policy: https://example.com/security-policy
+
+# We appreciate responsible disclosure. Please do not access or modify data that
+# is not yours, and give us reasonable time to remediate before public release.

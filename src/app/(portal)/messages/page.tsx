@@ -8,7 +8,9 @@ import {
   CheckCheck,
   MessageSquare,
   ArrowLeft,
+  Plus,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { useMessageStore } from "@/stores/message-store";
 import { useAuthStore } from "@/stores/auth-store";
@@ -17,22 +19,38 @@ import { cn } from "@/lib/utils";
 import { formatRelativeTime, formatDateTime, initials } from "@/lib/format";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function MessagesPage() {
   const conversations = useMessageStore((s) => s.conversations);
   const send = useMessageStore((s) => s.send);
   const markRead = useMessageStore((s) => s.markRead);
+  const start = useMessageStore((s) => s.start);
   const user = useAuthStore((s) => s.user);
   const log = useActivityStore((s) => s.log);
 
   const [activeId, setActiveId] = React.useState(conversations[0]?.id ?? "");
   const [draft, setDraft] = React.useState("");
   const active = conversations.find((c) => c.id === activeId);
+
+  const [composeOpen, setComposeOpen] = React.useState(false);
+  const [subject, setSubject] = React.useState("");
+  const [recipient, setRecipient] = React.useState("Account team");
+  const [firstMessage, setFirstMessage] = React.useState("");
 
   React.useEffect(() => {
     if (activeId) markRead(activeId);
@@ -45,11 +63,37 @@ export default function MessagesPage() {
     setDraft("");
   }
 
+  function handleStart() {
+    if (!subject.trim() || !firstMessage.trim() || !user) {
+      toast.error("Add a subject and a message");
+      return;
+    }
+    const id = start({
+      subject: subject.trim(),
+      recipient: recipient.trim() || "Account team",
+      author: user.name,
+      role: user.role,
+      body: firstMessage.trim(),
+    });
+    log("message_sent", user.name, `Conversation: ${subject.trim()}`);
+    setActiveId(id);
+    setComposeOpen(false);
+    setSubject("");
+    setFirstMessage("");
+    setRecipient("Account team");
+    toast.success("Conversation started");
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Messages"
         description="Secure conversations with your account team."
+        actions={
+          <Button onClick={() => setComposeOpen(true)}>
+            <Plus /> New message
+          </Button>
+        }
       />
 
       <Card className="grid h-[calc(100vh-16rem)] grid-cols-1 overflow-hidden md:grid-cols-[320px_1fr]">
@@ -227,6 +271,54 @@ export default function MessagesPage() {
           </div>
         )}
       </Card>
+
+      <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>New message</DialogTitle>
+            <DialogDescription>
+              Start a new conversation with your account team.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="msg-recipient">To</Label>
+              <Input
+                id="msg-recipient"
+                value={recipient}
+                onChange={(e) => setRecipient(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="msg-subject">Subject</Label>
+              <Input
+                id="msg-subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="What's this about?"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="msg-body">Message</Label>
+              <Textarea
+                id="msg-body"
+                rows={4}
+                value={firstMessage}
+                onChange={(e) => setFirstMessage(e.target.value)}
+                placeholder="Type your message…"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setComposeOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleStart}>
+              <Send /> Send
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -5,6 +5,16 @@ based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — user-experience round 4
+
+- **Ticket SLA / due dates** — tickets get a resolve-by target from their
+  priority; the list and detail show **Overdue** / **Due soon** / **Due in…**
+  indicators (waiting-on-customer and resolved/closed pause the clock).
+- **Start a new conversation** in Messages (compose dialog) — previously you
+  could only reply.
+- **Dismiss notifications** individually and **Clear all**.
+- **Projects status filter** (planning / in progress / on hold / completed).
+
 ### Added — user-experience & security round 3
 
 **Security & trust**

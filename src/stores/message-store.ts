@@ -12,10 +12,46 @@ interface MessageState {
     body: string,
   ) => void;
   markRead: (conversationId: string) => void;
+  start: (input: {
+    subject: string;
+    recipient: string;
+    author: string;
+    role: Role;
+    body: string;
+  }) => string;
 }
 
 export const useMessageStore = create<MessageState>((set) => ({
   conversations: seed,
+
+  start({ subject, recipient, author, role, body }) {
+    const id = `cnv_${Date.now()}`;
+    const now = new Date().toISOString();
+    set((state) => ({
+      conversations: [
+        {
+          id,
+          subject,
+          participants: [author, recipient],
+          unread: 0,
+          lastMessageAt: now,
+          messages: [
+            {
+              id: `m_${Date.now()}`,
+              author,
+              authorRole: role,
+              body,
+              timestamp: now,
+              status: "sent",
+              attachments: [],
+            },
+          ],
+        },
+        ...state.conversations,
+      ],
+    }));
+    return id;
+  },
 
   send(conversationId, author, role, body) {
     set((state) => ({

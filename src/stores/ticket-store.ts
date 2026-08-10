@@ -8,6 +8,7 @@ import type {
   TicketStatus,
 } from "@/lib/types";
 import { tickets as seed } from "@/lib/mock/tickets";
+import { dueDateForPriority } from "@/lib/sla";
 
 interface NewTicket {
   subject: string;
@@ -54,6 +55,7 @@ export const useTicketStore = create<TicketState>((set) => ({
       assignee: undefined,
       createdAt: now,
       updatedAt: now,
+      dueDate: dueDateForPriority(new Date(now), input.priority),
       hasAttachments: Boolean(input.attachments?.length),
       attachments: input.attachments ?? [],
       timeline: [event],

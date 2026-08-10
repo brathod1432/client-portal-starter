@@ -12,6 +12,13 @@
 The following user-first improvements are implemented (see
 [`CHANGELOG.md`](../CHANGELOG.md)):
 
+**Round 4**
+
+- **Support:** ticket SLA/due dates with overdue & due-soon indicators.
+- **Messaging:** start a new conversation (compose).
+- **Inbox:** dismiss notifications + clear all.
+- **Projects:** status filter.
+
 **Round 3**
 
 - **Security/trust:** working "remember me" (session persistence control),
@@ -191,29 +198,31 @@ Security is the #1 priority. The starter ships a strong **client** posture and
 
 ## Prioritized backlog (at a glance)
 
-| Priority | Item                                                               | Type     | Status  |
-| -------- | ------------------------------------------------------------------ | -------- | ------- |
-| P0       | Server sessions (httpOnly cookies) + server RBAC                   | Security | ▶       |
-| P0       | Persistence (DB) + real API via TanStack Query                     | Platform | ▶       |
-| P1       | Client-side rate limiting / lockout (demo of the pattern)          | Security | ✅ done |
-| P1       | 2FA setup UX, change password, password show/hide, idle warning    | Security | ✅ done |
-| P1       | MFA (server TOTP/passkeys), server rate limiting, CSRF             | Security | ▶       |
-| P1       | Secure file uploads (server validate/sign/AV)                      | Security | ▶       |
-| P1       | Realtime messages/notifications + email delivery                   | UX       | ▶       |
-| P2       | Nonce-based CSP                                                    | Security | ▶       |
-| P2       | Optimistic updates + undo                                          | UX       | ▶       |
-| P2       | i18n, chart SR fallbacks                                           | A11y/UX  | ▶       |
-| P2       | Download my data (GDPR export), consent banner                     | UX/Legal | ✅ done |
-| P2       | Login lockout countdown, last-sign-in, sign-out-everywhere         | Security | ✅ done |
-| P2       | security.txt, PWA manifest, robots                                 | Deploy   | ✅ done |
-| P2       | Ticket attachments, CSAT rating, tickets CSV export                | UX       | ✅ done |
-| P1       | Working "remember me" session persistence                          | Security | ✅ done |
-| P1       | Invoice detail + receipt, payment methods + auto-pay               | Billing  | ✅ done |
-| P2       | Help menu, notifications filters, offline banner, sitemap          | UX       | ✅ done |
-| P2       | Text-size accessibility setting                                    | A11y     | ✅ done |
-| P3       | Onboarding checklist, keyboard-shortcuts help                      | UX       | ✅ done |
-| P3       | Guided product tour, customizable dashboard                        | UX       | ▶       |
-| —        | Command palette, real actions, filters, idle-logout, a11y, exports | Multiple | ✅ done |
+| Priority | Item                                                                | Type     | Status  |
+| -------- | ------------------------------------------------------------------- | -------- | ------- |
+| P0       | Server sessions (httpOnly cookies) + server RBAC                    | Security | ▶       |
+| P0       | Persistence (DB) + real API via TanStack Query                      | Platform | ▶       |
+| P1       | Client-side rate limiting / lockout (demo of the pattern)           | Security | ✅ done |
+| P1       | 2FA setup UX, change password, password show/hide, idle warning     | Security | ✅ done |
+| P1       | MFA (server TOTP/passkeys), server rate limiting, CSRF              | Security | ▶       |
+| P1       | Secure file uploads (server validate/sign/AV)                       | Security | ▶       |
+| P1       | Realtime messages/notifications + email delivery                    | UX       | ▶       |
+| P2       | Nonce-based CSP                                                     | Security | ▶       |
+| P2       | Optimistic updates + undo                                           | UX       | ▶       |
+| P2       | i18n, chart SR fallbacks                                            | A11y/UX  | ▶       |
+| P2       | Download my data (GDPR export), consent banner                      | UX/Legal | ✅ done |
+| P2       | Login lockout countdown, last-sign-in, sign-out-everywhere          | Security | ✅ done |
+| P2       | security.txt, PWA manifest, robots                                  | Deploy   | ✅ done |
+| P2       | Ticket attachments, CSAT rating, tickets CSV export                 | UX       | ✅ done |
+| P1       | Working "remember me" session persistence                           | Security | ✅ done |
+| P1       | Invoice detail + receipt, payment methods + auto-pay                | Billing  | ✅ done |
+| P2       | Help menu, notifications filters, offline banner, sitemap           | UX       | ✅ done |
+| P2       | Text-size accessibility setting                                     | A11y     | ✅ done |
+| P1       | Ticket SLA/due dates + overdue indicators                           | Support  | ✅ done |
+| P2       | Start new conversation, dismiss/clear notifications, project filter | UX       | ✅ done |
+| P3       | Onboarding checklist, keyboard-shortcuts help                       | UX       | ✅ done |
+| P3       | Guided product tour, customizable dashboard                         | UX       | ▶       |
+| —        | Command palette, real actions, filters, idle-logout, a11y, exports  | Multiple | ✅ done |
 
 The **▶ Recommended** items are intentionally out of scope for a client-only
 starter but are documented end-to-end so a team can implement them confidently.

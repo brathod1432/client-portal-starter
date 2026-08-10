@@ -10,9 +10,11 @@ import { toast } from "sonner";
 import type { Ticket, TicketStatus } from "@/lib/types";
 import { useTicketStore } from "@/stores/ticket-store";
 import { formatRelativeTime } from "@/lib/format";
+import { ticketSla } from "@/lib/sla";
 import { downloadCsv } from "@/lib/download";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/shared/data-table";
 import { Can } from "@/components/rbac/can";
 import { Button } from "@/components/ui/button";
@@ -65,6 +67,23 @@ const columns: ColumnDef<Ticket>[] = [
         {row.original.assignee ?? "Unassigned"}
       </span>
     ),
+  },
+  {
+    id: "sla",
+    header: "SLA",
+    cell: ({ row }) => {
+      const sla = ticketSla(row.original);
+      if (sla.state === "none") {
+        return <span className="text-muted-foreground text-sm">—</span>;
+      }
+      const variant =
+        sla.state === "overdue"
+          ? "destructive"
+          : sla.state === "due_soon"
+            ? "warning"
+            : "secondary";
+      return <Badge variant={variant}>{sla.label}</Badge>;
+    },
   },
   {
     accessorKey: "updatedAt",

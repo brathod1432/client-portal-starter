@@ -14,6 +14,7 @@ export const tickets: Ticket[] = [
     assignee: "Marcus Lee",
     createdAt: "2025-08-04T08:12:00.000Z",
     updatedAt: "2025-08-05T14:30:00.000Z",
+    dueDate: "2025-08-05T08:12:00.000Z",
     hasAttachments: true,
     timeline: [
       {
@@ -138,6 +139,7 @@ export const tickets: Ticket[] = [
     assignee: undefined,
     createdAt: "2025-07-15T09:30:00.000Z",
     updatedAt: "2025-07-15T09:30:00.000Z",
+    dueDate: "2025-07-22T09:30:00.000Z",
     hasAttachments: false,
     timeline: [
       {

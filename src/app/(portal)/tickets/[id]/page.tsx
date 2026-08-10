@@ -18,6 +18,7 @@ import { useTicketStore } from "@/stores/ticket-store";
 import { useAuthStore } from "@/stores/auth-store";
 import { useActivityStore } from "@/stores/activity-store";
 import { formatDateTime, formatFileSize, initials } from "@/lib/format";
+import { ticketSla } from "@/lib/sla";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -25,6 +26,7 @@ import { Can } from "@/components/rbac/can";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -231,6 +233,28 @@ export default function TicketDetailPage({
               />
               <Row label="Created" value={formatDateTime(ticket.createdAt)} />
               <Row label="Updated" value={formatDateTime(ticket.updatedAt)} />
+              {ticket.dueDate ? (
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-muted-foreground">SLA due</span>
+                  {(() => {
+                    const meta = ticketSla(ticket);
+                    if (meta.state === "none") {
+                      return (
+                        <span className="font-medium">
+                          {formatDateTime(ticket.dueDate)}
+                        </span>
+                      );
+                    }
+                    const variant =
+                      meta.state === "overdue"
+                        ? "destructive"
+                        : meta.state === "due_soon"
+                          ? "warning"
+                          : "secondary";
+                    return <Badge variant={variant}>{meta.label}</Badge>;
+                  })()}
+                </div>
+              ) : null}
             </CardContent>
           </Card>
 

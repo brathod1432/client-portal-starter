@@ -73,6 +73,7 @@ export interface Ticket {
   assignee?: string;
   createdAt: string;
   updatedAt: string;
+  dueDate?: string;
   timeline: TicketEvent[];
   hasAttachments: boolean;
   attachments?: { name: string; sizeKb: number }[];

@@ -11,6 +11,8 @@ import {
   Receipt,
   FolderKanban,
   Settings as SettingsIcon,
+  X,
+  Trash2,
 } from "lucide-react";
 
 import type { NotificationType } from "@/lib/types";
@@ -42,6 +44,8 @@ export default function NotificationsPage() {
   const items = useNotificationStore((s) => s.items);
   const markRead = useNotificationStore((s) => s.markRead);
   const markAllRead = useNotificationStore((s) => s.markAllRead);
+  const dismiss = useNotificationStore((s) => s.dismiss);
+  const clearAll = useNotificationStore((s) => s.clearAll);
   const unread = items.filter((n) => !n.read).length;
 
   const [type, setType] = React.useState<NotificationType | "all">("all");
@@ -59,10 +63,17 @@ export default function NotificationsPage() {
         title="Notifications"
         description={unread ? `${unread} unread` : "You're all caught up."}
         actions={
-          unread ? (
-            <Button variant="outline" onClick={markAllRead}>
-              <Check /> Mark all read
-            </Button>
+          items.length ? (
+            <>
+              {unread ? (
+                <Button variant="outline" onClick={markAllRead}>
+                  <Check /> Mark all read
+                </Button>
+              ) : null}
+              <Button variant="ghost" onClick={clearAll}>
+                <Trash2 /> Clear all
+              </Button>
+            </>
           ) : undefined
         }
       />
@@ -96,7 +107,14 @@ export default function NotificationsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState icon={Bell} title="No notifications match your filters" />
+        <EmptyState
+          icon={Bell}
+          title={
+            items.length === 0
+              ? "You're all caught up"
+              : "No notifications match your filters"
+          }
+        />
       ) : (
         <div className="space-y-2">
           {filtered.map((n) => {
@@ -124,6 +142,18 @@ export default function NotificationsPage() {
                       {formatRelativeTime(n.timestamp)}
                     </p>
                   </div>
+                  <button
+                    type="button"
+                    aria-label="Dismiss notification"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      dismiss(n.id);
+                    }}
+                    className="text-muted-foreground hover:text-foreground focus-visible:ring-ring -mt-1 -mr-1 rounded p-1 focus-visible:ring-2 focus-visible:outline-none"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
                 </CardContent>
               </Card>
             );

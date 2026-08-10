@@ -1,0 +1,85 @@
+import type { Conversation } from "@/lib/types";
+
+export const conversations: Conversation[] = [
+  {
+    id: "cnv_001",
+    subject: "Store 118 connectivity — status update",
+    participants: ["Ava Thompson", "Marcus Lee"],
+    unread: 2,
+    lastMessageAt: "2025-08-05T14:35:00.000Z",
+    messages: [
+      {
+        id: "m1",
+        author: "Ava Thompson",
+        authorRole: "client",
+        body: "Hi Marcus, any progress on the Store 118 terminals? Staff are still rebooting a few times a day.",
+        timestamp: "2025-08-05T13:10:00.000Z",
+        status: "read",
+        attachments: [],
+      },
+      {
+        id: "m2",
+        author: "Marcus Lee",
+        authorRole: "agent",
+        body: "Hi Ava — we identified a faulty SFP on the store switch. Replacement is being couriered and should be installed tomorrow morning.",
+        timestamp: "2025-08-05T14:30:00.000Z",
+        status: "delivered",
+        attachments: [{ name: "switch-logs.txt", sizeKb: 42 }],
+      },
+      {
+        id: "m3",
+        author: "Marcus Lee",
+        authorRole: "agent",
+        body: "I'll confirm here once the swap is done and we've monitored for a couple of hours.",
+        timestamp: "2025-08-05T14:35:00.000Z",
+        status: "delivered",
+        attachments: [],
+      },
+    ],
+  },
+  {
+    id: "cnv_002",
+    subject: "Portal launch — kickoff scheduling",
+    participants: ["Ava Thompson", "Priya Nair"],
+    unread: 0,
+    lastMessageAt: "2025-08-02T16:00:00.000Z",
+    messages: [
+      {
+        id: "m1",
+        author: "Priya Nair",
+        authorRole: "manager",
+        body: "Ava, we're ready to kick off the portal project. Does the week of the 18th work for a discovery workshop?",
+        timestamp: "2025-08-02T15:00:00.000Z",
+        status: "read",
+        attachments: [],
+      },
+      {
+        id: "m2",
+        author: "Ava Thompson",
+        authorRole: "client",
+        body: "The 20th works well for our team. I'll send calendar invites.",
+        timestamp: "2025-08-02T16:00:00.000Z",
+        status: "read",
+        attachments: [],
+      },
+    ],
+  },
+  {
+    id: "cnv_003",
+    subject: "July invoice credit note",
+    participants: ["Ava Thompson", "Priya Nair"],
+    unread: 0,
+    lastMessageAt: "2025-07-24T16:05:00.000Z",
+    messages: [
+      {
+        id: "m1",
+        author: "Priya Nair",
+        authorRole: "manager",
+        body: "Credit note CN-0087 has been applied for the duplicate charge. Apologies for the mix-up!",
+        timestamp: "2025-07-24T16:05:00.000Z",
+        status: "read",
+        attachments: [{ name: "CN-0087.pdf", sizeKb: 88 }],
+      },
+    ],
+  },
+];

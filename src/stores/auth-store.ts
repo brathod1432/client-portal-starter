@@ -24,7 +24,12 @@ interface AuthState {
   hydrated: boolean;
   failedAttempts: number;
   lockedUntil: number | null;
-  login: (email: string, password: string) => Promise<AuthResult>;
+  remember: boolean;
+  login: (
+    email: string,
+    password: string,
+    remember?: boolean,
+  ) => Promise<AuthResult>;
   loginAs: (role: Role) => void;
   register: (input: {
     name: string;
@@ -53,8 +58,9 @@ export const useAuthStore = create<AuthState>()(
       hydrated: false,
       failedAttempts: 0,
       lockedUntil: null,
+      remember: true,
 
-      async login(email, password) {
+      async login(email, password, remember = true) {
         const { lockedUntil } = get();
         if (lockedUntil && Date.now() < lockedUntil) {
           const secs = Math.ceil((lockedUntil - Date.now()) / 1000);
@@ -84,7 +90,7 @@ export const useAuthStore = create<AuthState>()(
         if (user.status === "suspended") {
           return { ok: false, error: "This account is suspended." };
         }
-        set({ user, failedAttempts: 0, lockedUntil: null });
+        set({ user, remember, failedAttempts: 0, lockedUntil: null });
         return { ok: true };
       },
 
@@ -144,7 +150,13 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "cps.auth",
-      partialize: (state) => ({ user: state.user }),
+      // Only persist the session across restarts when "remember me" is on.
+      // Otherwise the user stays signed in for the current tab (in memory)
+      // but must sign in again after closing the browser.
+      partialize: (state) => ({
+        user: state.remember ? state.user : null,
+        remember: state.remember,
+      }),
       onRehydrateStorage: () => (state) => state?.setHydrated(),
     },
   ),

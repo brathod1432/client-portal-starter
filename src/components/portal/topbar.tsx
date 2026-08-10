@@ -7,6 +7,7 @@ import { Brand } from "@/components/portal/brand";
 import { SidebarNav } from "@/components/portal/sidebar-nav";
 import { UserMenu } from "@/components/portal/user-menu";
 import { NotificationsMenu } from "@/components/portal/notifications-menu";
+import { HelpMenu } from "@/components/portal/help-menu";
 import { RoleSwitcher } from "@/components/portal/role-switcher";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -79,6 +80,7 @@ export function Topbar() {
 
       <div className="flex items-center gap-1.5">
         <RoleSwitcher />
+        <HelpMenu />
         <ThemeToggle />
         <NotificationsMenu />
         <UserMenu />

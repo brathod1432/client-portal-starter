@@ -55,7 +55,7 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: LoginInput) {
-    const result = await login(values.email, values.password);
+    const result = await login(values.email, values.password, values.remember);
     if (!result.ok) {
       form.setError("password", { message: result.error });
       return;

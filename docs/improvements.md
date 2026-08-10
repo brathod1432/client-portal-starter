@@ -12,6 +12,15 @@
 The following user-first improvements are implemented (see
 [`CHANGELOG.md`](../CHANGELOG.md)):
 
+**Round 3**
+
+- **Security/trust:** working "remember me" (session persistence control),
+  offline status banner.
+- **Billing:** invoice detail dialog with line items + receipt download,
+  payment-methods management + auto-pay (Settings → Billing).
+- **Usability/a11y:** header help menu, notifications filters (type +
+  unread-only), text-size accessibility setting, `sitemap.xml`.
+
 **Round 2**
 
 - **Security/trust:** login lockout live countdown, "last sign-in" indicator
@@ -198,6 +207,10 @@ Security is the #1 priority. The starter ships a strong **client** posture and
 | P2       | Login lockout countdown, last-sign-in, sign-out-everywhere         | Security | ✅ done |
 | P2       | security.txt, PWA manifest, robots                                 | Deploy   | ✅ done |
 | P2       | Ticket attachments, CSAT rating, tickets CSV export                | UX       | ✅ done |
+| P1       | Working "remember me" session persistence                          | Security | ✅ done |
+| P1       | Invoice detail + receipt, payment methods + auto-pay               | Billing  | ✅ done |
+| P2       | Help menu, notifications filters, offline banner, sitemap          | UX       | ✅ done |
+| P2       | Text-size accessibility setting                                    | A11y     | ✅ done |
 | P3       | Onboarding checklist, keyboard-shortcuts help                      | UX       | ✅ done |
 | P3       | Guided product tour, customizable dashboard                        | UX       | ▶       |
 | —        | Command palette, real actions, filters, idle-logout, a11y, exports | Multiple | ✅ done |

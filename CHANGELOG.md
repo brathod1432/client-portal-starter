@@ -5,6 +5,31 @@ based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — user-experience & security round 3
+
+**Security & trust**
+
+- **"Remember me" now works** — controls whether the session persists across
+  browser restarts (kept in memory for the tab otherwise) via the auth store's
+  persistence partializer.
+- **Offline status banner** — shows when the browser is offline so users know
+  actions won't sync (pairs with the PWA manifest).
+
+**Billing**
+
+- **Invoice detail dialog** with line items and a **download receipt** action.
+- **Payment methods** management (add/remove/set default card) + **auto-pay**
+  toggle, in a new Settings → Billing tab. Demo only — production tokenizes via
+  a PCI-compliant provider.
+
+**Usability & accessibility**
+
+- **Help menu** in the header (open a ticket, message team, help center,
+  keyboard shortcuts).
+- **Notifications filters** — by type and "unread only".
+- **Text-size** accessibility setting (Normal / Large) applied app-wide.
+- **`sitemap.ts`** completes the robots + manifest + sitemap trio.
+
 ### Added — user-experience & security round 2
 
 **Security & trust**

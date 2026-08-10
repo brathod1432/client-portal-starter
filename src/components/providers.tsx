@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { PreferenceEffects } from "@/components/shared/preference-effects";
 
 /**
  * Global client providers. TanStack Query is wired up ready for a real API;
@@ -34,6 +35,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <QueryClientProvider client={queryClient}>
         <TooltipProvider delayDuration={200}>
+          <PreferenceEffects />
           {children}
           <Toaster position="top-right" richColors closeButton />
         </TooltipProvider>

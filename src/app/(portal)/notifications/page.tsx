@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import {
   Bell,
@@ -20,6 +21,13 @@ import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const icons: Record<NotificationType, typeof Bell> = {
   ticket: LifeBuoy,
@@ -36,6 +44,15 @@ export default function NotificationsPage() {
   const markAllRead = useNotificationStore((s) => s.markAllRead);
   const unread = items.filter((n) => !n.read).length;
 
+  const [type, setType] = React.useState<NotificationType | "all">("all");
+  const [unreadOnly, setUnreadOnly] = React.useState(false);
+
+  const filtered = items.filter((n) => {
+    const matchesType = type === "all" || n.type === type;
+    const matchesUnread = !unreadOnly || !n.read;
+    return matchesType && matchesUnread;
+  });
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -50,11 +67,39 @@ export default function NotificationsPage() {
         }
       />
 
-      {items.length === 0 ? (
-        <EmptyState icon={Bell} title="No notifications" />
+      <div className="flex flex-wrap items-center gap-2">
+        <Select
+          value={type}
+          onValueChange={(v) => setType(v as NotificationType | "all")}
+        >
+          <SelectTrigger className="w-44" aria-label="Filter by type">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All types</SelectItem>
+            <SelectItem value="ticket">Tickets</SelectItem>
+            <SelectItem value="invoice">Invoices</SelectItem>
+            <SelectItem value="document">Documents</SelectItem>
+            <SelectItem value="message">Messages</SelectItem>
+            <SelectItem value="project">Projects</SelectItem>
+            <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button
+          variant={unreadOnly ? "default" : "outline"}
+          size="sm"
+          aria-pressed={unreadOnly}
+          onClick={() => setUnreadOnly((v) => !v)}
+        >
+          Unread only
+        </Button>
+      </div>
+
+      {filtered.length === 0 ? (
+        <EmptyState icon={Bell} title="No notifications match your filters" />
       ) : (
         <div className="space-y-2">
-          {items.map((n) => {
+          {filtered.map((n) => {
             const Icon = icons[n.type];
             const body = (
               <Card

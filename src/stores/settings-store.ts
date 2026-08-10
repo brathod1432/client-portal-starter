@@ -15,6 +15,7 @@ export interface PortalSettings {
   language: string;
   // Accessibility
   reduceMotion: boolean;
+  textSize: "normal" | "large";
   // UX state
   onboardingDismissed: boolean;
   consentAcknowledged: boolean;
@@ -35,6 +36,7 @@ const defaults: PortalSettings = {
   timezone: "America/New_York",
   language: "en-US",
   reduceMotion: false,
+  textSize: "normal",
   onboardingDismissed: false,
   consentAcknowledged: false,
 };

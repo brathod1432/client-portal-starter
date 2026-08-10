@@ -10,11 +10,13 @@ import { CommandPalette } from "@/components/portal/command-palette";
 import { IdleTimeout } from "@/components/portal/idle-timeout";
 import { KeyboardShortcuts } from "@/components/portal/keyboard-shortcuts";
 import { ConsentBanner } from "@/components/portal/consent-banner";
+import { OfflineBanner } from "@/components/portal/offline-banner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function PortalShell({ children }: { children: React.ReactNode }) {
   return (
     <AuthGuard>
+      <OfflineBanner />
       <CommandPalette />
       <KeyboardShortcuts />
       <IdleTimeout />

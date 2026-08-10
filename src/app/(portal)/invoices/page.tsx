@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Download, CreditCard, FileDown, Receipt, Loader2 } from "lucide-react";
+import {
+  Download,
+  CreditCard,
+  FileDown,
+  Receipt,
+  Loader2,
+  Eye,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import type { Invoice } from "@/lib/types";
@@ -45,6 +52,7 @@ export default function InvoicesPage() {
   const log = useActivityStore((s) => s.log);
 
   const [payTarget, setPayTarget] = React.useState<Invoice | null>(null);
+  const [viewTarget, setViewTarget] = React.useState<Invoice | null>(null);
   const [paying, setPaying] = React.useState(false);
 
   const outstanding = invoices
@@ -164,6 +172,14 @@ export default function InvoicesPage() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label={`View ${inv.number}`}
+                        onClick={() => setViewTarget(inv)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         aria-label={`Download ${inv.number}`}
                         onClick={() =>
                           downloadPlaceholder(
@@ -236,6 +252,100 @@ export default function InvoicesPage() {
                 </>
               )}
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Invoice detail */}
+      <Dialog
+        open={!!viewTarget}
+        onOpenChange={(open) => !open && setViewTarget(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Invoice {viewTarget?.number}</DialogTitle>
+            <DialogDescription>
+              {viewTarget
+                ? `Issued ${formatDate(viewTarget.issuedDate)} · Due ${formatDate(
+                    viewTarget.dueDate,
+                  )}`
+                : null}
+            </DialogDescription>
+          </DialogHeader>
+          {viewTarget ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <StatusBadge status={viewTarget.status} />
+                {viewTarget.paidDate ? (
+                  <span className="text-muted-foreground text-xs">
+                    Paid {formatDate(viewTarget.paidDate)}
+                  </span>
+                ) : null}
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Description</TableHead>
+                    <TableHead className="text-right">Qty</TableHead>
+                    <TableHead className="text-right">Unit</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {viewTarget.lineItems.map((li) => (
+                    <TableRow key={li.description}>
+                      <TableCell>{li.description}</TableCell>
+                      <TableCell className="text-right">
+                        {li.quantity}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {formatCurrency(li.unitPrice, viewTarget.currency)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {formatCurrency(
+                          li.quantity * li.unitPrice,
+                          viewTarget.currency,
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <div className="flex justify-between border-t pt-3 text-sm font-semibold">
+                <span>Total</span>
+                <span>
+                  {formatCurrency(viewTarget.amount, viewTarget.currency)}
+                </span>
+              </div>
+            </div>
+          ) : null}
+          <DialogFooter>
+            {viewTarget?.status === "paid" ? (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  downloadPlaceholder(
+                    `${viewTarget.number}-receipt`,
+                    `Paid ${formatCurrency(viewTarget.amount, viewTarget.currency)}`,
+                  )
+                }
+              >
+                <Receipt /> Download receipt
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  viewTarget &&
+                  downloadPlaceholder(
+                    viewTarget.number,
+                    `Amount: ${formatCurrency(viewTarget.amount, viewTarget.currency)}`,
+                  )
+                }
+              >
+                <Download /> Download invoice
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

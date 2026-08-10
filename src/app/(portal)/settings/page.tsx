@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import {
   Bell,
+  CreditCard,
   Laptop,
   Monitor,
   Moon,
@@ -22,6 +23,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { TwoFactorCard } from "@/components/settings/two-factor-card";
 import { ChangePasswordCard } from "@/components/settings/change-password-card";
 import { DataExportCard } from "@/components/settings/data-export-card";
+import { PaymentMethodsCard } from "@/components/settings/payment-methods-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -99,6 +101,9 @@ export default function SettingsPage() {
         <TabsList>
           <TabsTrigger value="security">
             <ShieldCheck className="h-4 w-4" /> Security
+          </TabsTrigger>
+          <TabsTrigger value="billing">
+            <CreditCard className="h-4 w-4" /> Billing
           </TabsTrigger>
           <TabsTrigger value="notifications">
             <Bell className="h-4 w-4" /> Notifications
@@ -201,6 +206,11 @@ export default function SettingsPage() {
           </Card>
         </TabsContent>
 
+        {/* BILLING */}
+        <TabsContent value="billing" className="space-y-6">
+          <PaymentMethodsCard />
+        </TabsContent>
+
         {/* NOTIFICATIONS */}
         <TabsContent value="notifications" className="space-y-6">
           <Card>
@@ -295,7 +305,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle>Accessibility</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <ToggleRow
                 id="reduceMotion"
                 label="Reduce motion"
@@ -303,6 +313,38 @@ export default function SettingsPage() {
                 checked={settings.reduceMotion}
                 onChange={(v) => toggle("reduceMotion", v)}
               />
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5 pr-4">
+                  <Label>Text size</Label>
+                  <p className="text-muted-foreground text-xs">
+                    Increase text and spacing across the portal.
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  {(["normal", "large"] as const).map((size) => (
+                    <Button
+                      key={size}
+                      type="button"
+                      variant={
+                        settings.textSize === size ? "default" : "outline"
+                      }
+                      size="sm"
+                      aria-pressed={settings.textSize === size}
+                      onClick={() => {
+                        settings.update({ textSize: size });
+                        log(
+                          "settings_update",
+                          user?.name ?? "You",
+                          `Text size: ${size}`,
+                        );
+                      }}
+                    >
+                      {size === "normal" ? "Normal" : "Large"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

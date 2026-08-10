@@ -78,3 +78,31 @@ export const messageSchema = z.object({
   body: z.string().min(1, "Message cannot be empty").max(4000),
 });
 export type MessageInput = z.infer<typeof messageSchema>;
+
+const strongPassword = z
+  .string()
+  .min(12, "Use at least 12 characters")
+  .regex(/[a-z]/, "Include a lowercase letter")
+  .regex(/[A-Z]/, "Include an uppercase letter")
+  .regex(/[0-9]/, "Include a number")
+  .regex(/[^A-Za-z0-9]/, "Include a symbol");
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Enter your current password"),
+    newPassword: strongPassword,
+    confirmPassword: z.string(),
+  })
+  .refine((d) => d.newPassword === d.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+export const twoFactorSchema = z.object({
+  code: z
+    .string()
+    .length(6, "Enter the 6-digit code")
+    .regex(/^[0-9]+$/, "Digits only"),
+});
+export type TwoFactorInput = z.infer<typeof twoFactorSchema>;

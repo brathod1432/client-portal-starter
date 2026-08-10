@@ -12,6 +12,7 @@ import { registerSchema, type RegisterInput } from "@/lib/validations";
 import { useAuthStore } from "@/stores/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PasswordStrength } from "@/components/shared/password-strength";
 import {
@@ -133,8 +134,7 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     autoComplete="new-password"
                     placeholder="At least 12 characters"
                     {...field}
@@ -152,8 +152,7 @@ export default function RegisterPage() {
               <FormItem>
                 <FormLabel>Confirm password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     autoComplete="new-password"
                     placeholder="Re-enter your password"
                     {...field}

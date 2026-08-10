@@ -15,6 +15,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { useActivityStore } from "@/stores/activity-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -105,8 +106,7 @@ export default function LoginPage() {
                   </Link>
                 </div>
                 <FormControl>
-                  <Input
-                    type="password"
+                  <PasswordInput
                     autoComplete="current-password"
                     placeholder="••••••••••••"
                     {...field}

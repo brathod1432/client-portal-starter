@@ -14,7 +14,7 @@ import { initials, formatDate } from "@/lib/format";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -55,6 +55,8 @@ export default function ProfilePage() {
   const updateProfile = useAuthStore((s) => s.updateProfile);
   const log = useActivityStore((s) => s.log);
 
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const form = useForm<ProfileInput>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -71,6 +73,27 @@ export default function ProfilePage() {
     toast.success("Profile updated");
   }
 
+  function onAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Basic client-side validation. A backend must re-validate + scan uploads.
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be under 2 MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      updateProfile({ avatarUrl: String(reader.result) });
+      log("profile_update", user?.name ?? "You", "Avatar updated");
+      toast.success("Profile photo updated");
+    };
+    reader.readAsDataURL(file);
+  }
+
   if (!user) return null;
 
   return (
@@ -85,6 +108,9 @@ export default function ProfilePage() {
           <CardContent className="flex flex-col items-center pt-6 text-center">
             <div className="relative">
               <Avatar className="h-24 w-24">
+                {user.avatarUrl ? (
+                  <AvatarImage src={user.avatarUrl} alt="" />
+                ) : null}
                 <AvatarFallback className="text-2xl">
                   {initials(user.name)}
                 </AvatarFallback>
@@ -93,12 +119,18 @@ export default function ProfilePage() {
                 type="button"
                 className="bg-background hover:bg-accent focus-visible:ring-ring absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full border shadow-sm focus-visible:ring-2 focus-visible:outline-none"
                 aria-label="Change avatar"
-                onClick={() =>
-                  toast.info("Avatar upload is a demo placeholder")
-                }
+                onClick={() => fileInputRef.current?.click()}
               >
                 <Camera className="h-4 w-4" />
               </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                aria-hidden="true"
+                onChange={onAvatarChange}
+              />
             </div>
             <p className="mt-4 text-lg font-semibold">{user.name}</p>
             <p className="text-muted-foreground text-sm">{user.email}</p>

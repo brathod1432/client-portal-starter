@@ -141,7 +141,6 @@ export function CommandPalette() {
         <DialogTitle className="sr-only">Command palette</DialogTitle>
         <div className="flex items-center gap-2 border-b px-4">
           <Search className="text-muted-foreground h-4 w-4 shrink-0" />
-          {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
           <input
             autoFocus
             value={query}

@@ -15,6 +15,9 @@ export interface PortalSettings {
   language: string;
   // Accessibility
   reduceMotion: boolean;
+  // UX state
+  onboardingDismissed: boolean;
+  consentAcknowledged: boolean;
 }
 
 interface SettingsState extends PortalSettings {
@@ -32,6 +35,8 @@ const defaults: PortalSettings = {
   timezone: "America/New_York",
   language: "en-US",
   reduceMotion: false,
+  onboardingDismissed: false,
+  consentAcknowledged: false,
 };
 
 export const useSettingsStore = create<SettingsState>()(

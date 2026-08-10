@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import {
   Bell,
   Laptop,
-  Lock,
   Monitor,
   Moon,
   ShieldCheck,
@@ -19,6 +18,9 @@ import { useSettingsStore } from "@/stores/settings-store";
 import { useActivityStore } from "@/stores/activity-store";
 import { useAuthStore } from "@/stores/auth-store";
 import { PageHeader } from "@/components/shared/page-header";
+import { TwoFactorCard } from "@/components/settings/two-factor-card";
+import { ChangePasswordCard } from "@/components/settings/change-password-card";
+import { DataExportCard } from "@/components/settings/data-export-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -99,34 +101,9 @@ export default function SettingsPage() {
 
         {/* SECURITY */}
         <TabsContent value="security" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Two-factor authentication</CardTitle>
-              <CardDescription>
-                Add an extra layer of security to your account with a TOTP
-                authenticator app.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Lock className="text-muted-foreground h-5 w-5" />
-                <div>
-                  <p className="text-sm font-medium">Authenticator app</p>
-                  <p className="text-muted-foreground text-xs">
-                    {settings.twoFactorEnabled ? "Enabled" : "Not configured"}
-                  </p>
-                </div>
-              </div>
-              <Switch
-                checked={settings.twoFactorEnabled}
-                onCheckedChange={(v) => {
-                  toggle("twoFactorEnabled", v);
-                  toast.success(v ? "2FA enabled" : "2FA disabled");
-                }}
-                aria-label="Toggle two-factor authentication"
-              />
-            </CardContent>
-          </Card>
+          <TwoFactorCard />
+
+          <ChangePasswordCard />
 
           <Card>
             <CardHeader>
@@ -168,6 +145,8 @@ export default function SettingsPage() {
               })}
             </CardContent>
           </Card>
+
+          <DataExportCard />
 
           <Card className="border-destructive/40">
             <CardHeader>

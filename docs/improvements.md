@@ -2,8 +2,25 @@
 
 > A practical, user-first analysis of how this portal becomes more useful in
 > real life, plus a dedicated security section. Items marked **✅ Implemented**
-> were added in this iteration; **▶ Recommended** items are the prioritized next
-> steps with rationale.
+> are in the codebase; **▶ Recommended** items are the prioritized next steps
+> with rationale.
+
+---
+
+## Recently shipped (user-experience & security round)
+
+The following user-first improvements were implemented in this round (see
+[`CHANGELOG.md`](../CHANGELOG.md)):
+
+- **Security:** login rate-limiting/lockout, change-password flow, real 2FA
+  setup (verification + recovery codes), password show/hide, idle-timeout
+  warning dialog with countdown, client-side upload validation.
+- **UX:** dashboard onboarding checklist, profile photo upload, "Download my
+  data" (GDPR-style export), keyboard-shortcuts help (`?`), privacy/consent
+  banner.
+
+Everything below remains the full analysis; the backlog at the end reflects
+current status.
 
 ---
 
@@ -158,13 +175,17 @@ Security is the #1 priority. The starter ships a strong **client** posture and
 | -------- | ------------------------------------------------------------------ | -------- | ------- |
 | P0       | Server sessions (httpOnly cookies) + server RBAC                   | Security | ▶       |
 | P0       | Persistence (DB) + real API via TanStack Query                     | Platform | ▶       |
-| P1       | MFA, rate limiting, lockout, CSRF                                  | Security | ▶       |
-| P1       | Secure file uploads (validate/sign/AV)                             | Security | ▶       |
+| P1       | Client-side rate limiting / lockout (demo of the pattern)          | Security | ✅ done |
+| P1       | 2FA setup UX, change password, password show/hide, idle warning    | Security | ✅ done |
+| P1       | MFA (server TOTP/passkeys), server rate limiting, CSRF             | Security | ▶       |
+| P1       | Secure file uploads (server validate/sign/AV)                      | Security | ▶       |
 | P1       | Realtime messages/notifications + email delivery                   | UX       | ▶       |
 | P2       | Nonce-based CSP                                                    | Security | ▶       |
 | P2       | Optimistic updates + undo                                          | UX       | ▶       |
 | P2       | i18n, chart SR fallbacks                                           | A11y/UX  | ▶       |
-| P3       | Onboarding tour, customizable dashboard                            | UX       | ▶       |
+| P2       | Download my data (GDPR export), consent banner                     | UX/Legal | ✅ done |
+| P3       | Onboarding checklist, keyboard-shortcuts help                      | UX       | ✅ done |
+| P3       | Guided product tour, customizable dashboard                        | UX       | ▶       |
 | —        | Command palette, real actions, filters, idle-logout, a11y, exports | Multiple | ✅ done |
 
 The **▶ Recommended** items are intentionally out of scope for a client-only

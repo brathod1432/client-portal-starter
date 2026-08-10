@@ -29,6 +29,7 @@ import { documents } from "@/lib/mock/documents";
 import { announcements } from "@/lib/mock/notifications";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatCard } from "@/components/dashboard/stat-card";
+import { OnboardingChecklist } from "@/components/dashboard/onboarding-checklist";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Can } from "@/components/rbac/can";
 import { Button } from "@/components/ui/button";
@@ -113,6 +114,8 @@ export default function DashboardPage() {
           </>
         }
       />
+
+      <OnboardingChecklist />
 
       {/* KPI row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

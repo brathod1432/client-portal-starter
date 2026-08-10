@@ -8,13 +8,17 @@ import { SidebarNav } from "@/components/portal/sidebar-nav";
 import { Topbar } from "@/components/portal/topbar";
 import { CommandPalette } from "@/components/portal/command-palette";
 import { IdleTimeout } from "@/components/portal/idle-timeout";
+import { KeyboardShortcuts } from "@/components/portal/keyboard-shortcuts";
+import { ConsentBanner } from "@/components/portal/consent-banner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function PortalShell({ children }: { children: React.ReactNode }) {
   return (
     <AuthGuard>
       <CommandPalette />
+      <KeyboardShortcuts />
       <IdleTimeout />
+      <ConsentBanner />
       <div className="flex min-h-screen">
         {/* Desktop sidebar */}
         <aside className="bg-sidebar sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r lg:flex">

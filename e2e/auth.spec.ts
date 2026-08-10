@@ -12,7 +12,7 @@ test.describe("Authentication", () => {
   test("invalid credentials show an error", async ({ page }) => {
     await page.goto("/login");
     await page.getByLabel("Email").fill("nobody@example.com");
-    await page.getByLabel("Password").fill("wrongpassword");
+    await page.getByLabel("Password", { exact: true }).fill("wrongpassword");
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect(page.getByText(/invalid email or password/i)).toBeVisible();
   });

@@ -8,7 +8,7 @@ import { initials } from "@/lib/format";
 import { ROLE_LABELS } from "@/lib/rbac";
 import { useAuthStore } from "@/stores/auth-store";
 import { useActivityStore } from "@/stores/activity-store";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -42,6 +42,9 @@ export function UserMenu() {
           aria-label="Open account menu"
         >
           <Avatar className="h-7 w-7">
+            {user.avatarUrl ? (
+              <AvatarImage src={user.avatarUrl} alt="" />
+            ) : null}
             <AvatarFallback>{initials(user.name)}</AvatarFallback>
           </Avatar>
           <span className="hidden text-sm font-medium md:inline">

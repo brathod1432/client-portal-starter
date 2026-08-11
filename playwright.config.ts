@@ -8,13 +8,19 @@ export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 2 : 1,
+  // A single Next server backs the whole suite; cap concurrency so a large
+  // parallel run doesn't overwhelm it and cause navigation timeouts.
+  workers: process.env.CI ? 1 : 4,
   reporter: process.env.CI ? "html" : "list",
+  timeout: 45_000,
+  expect: { timeout: 10_000 },
   use: {
     baseURL: "http://localhost:3100",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    navigationTimeout: 30_000,
+    actionTimeout: 15_000,
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {

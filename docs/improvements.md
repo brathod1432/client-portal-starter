@@ -12,6 +12,12 @@
 The following user-first improvements are implemented (see
 [`CHANGELOG.md`](../CHANGELOG.md)):
 
+**Round 5**
+
+- **Localization:** Language + Timezone preferences now drive all date/time/
+  currency formatting (Settings → Appearance → Localization, with live preview).
+- **A11y:** screen-reader data-table fallbacks for the dashboard charts.
+
 **Round 4**
 
 - **Support:** ticket SLA/due dates with overdue & due-soon indicators.
@@ -209,7 +215,7 @@ Security is the #1 priority. The starter ships a strong **client** posture and
 | P1       | Realtime messages/notifications + email delivery                    | UX       | ▶       |
 | P2       | Nonce-based CSP                                                     | Security | ▶       |
 | P2       | Optimistic updates + undo                                           | UX       | ▶       |
-| P2       | i18n, chart SR fallbacks                                            | A11y/UX  | ▶       |
+| P2       | i18n (locale/timezone formatting), chart SR fallbacks               | A11y/UX  | ✅ done |
 | P2       | Download my data (GDPR export), consent banner                      | UX/Legal | ✅ done |
 | P2       | Login lockout countdown, last-sign-in, sign-out-everywhere          | Security | ✅ done |
 | P2       | security.txt, PWA manifest, robots                                  | Deploy   | ✅ done |

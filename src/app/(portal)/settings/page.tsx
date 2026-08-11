@@ -24,6 +24,7 @@ import { TwoFactorCard } from "@/components/settings/two-factor-card";
 import { ChangePasswordCard } from "@/components/settings/change-password-card";
 import { DataExportCard } from "@/components/settings/data-export-card";
 import { PaymentMethodsCard } from "@/components/settings/payment-methods-card";
+import { LocalizationCard } from "@/components/settings/localization-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -266,6 +267,7 @@ export default function SettingsPage() {
 
         {/* APPEARANCE */}
         <TabsContent value="appearance" className="space-y-6">
+          <LocalizationCard />
           <Card>
             <CardHeader>
               <CardTitle>Theme</CardTitle>

@@ -66,6 +66,63 @@ const tooltipStyle = {
 export default function DashboardCharts() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
+      {/* Screen-reader accessible equivalents of the visual charts. */}
+      <div className="sr-only">
+        <table>
+          <caption>Ticket volume — opened vs. resolved, last 6 months</caption>
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Opened</th>
+              <th scope="col">Resolved</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ticketTrend.map((r) => (
+              <tr key={r.month}>
+                <th scope="row">{r.month}</th>
+                <td>{r.opened}</td>
+                <td>{r.resolved}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <table>
+          <caption>Service availability — monthly uptime percentage</caption>
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Uptime %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {slaData.map((r) => (
+              <tr key={r.month}>
+                <th scope="row">{r.month}</th>
+                <td>{r.uptime}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <table>
+          <caption>Spend by category — year to date</caption>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Amount (USD)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {spendByCategory.map((r) => (
+              <tr key={r.name}>
+                <th scope="row">{r.name}</th>
+                <td>{r.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>Ticket volume</CardTitle>

@@ -42,7 +42,7 @@ npm run screenshots # regenerate docs/screenshots
 - **`<Can>`** — shows/hides content and renders fallback per role.
 - **Accessibility** — jest-axe on Button, PageHeader, StatCard.
 
-### End-to-end (`e2e/`) — 88 tests across every module
+### End-to-end (`e2e/`) — 89 tests across every module
 
 - **auth.spec** — redirect when unauthenticated, generic invalid-credential
   error, password show/hide toggle, account lockout after repeated failures,
@@ -65,7 +65,8 @@ npm run screenshots # regenerate docs/screenshots
 - **profile.spec** — identity + last sign-in, save info, avatar upload.
 - **settings.spec** — 2FA setup + recovery codes, change password
   (reject/accept), data export, sign-out-everywhere, payment methods
-  add/default/remove, auto-pay, theme + text-size.
+  add/default/remove, auto-pay, theme + text-size, localization (locale/
+  timezone reformatting the live preview).
 - **help-center.spec** — FAQ search, accordion expand, support shortcuts.
 - **activity-log.spec** — client self-scope vs. manager org-wide + CSV export +
   type filter.

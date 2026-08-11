@@ -5,6 +5,17 @@ based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — localization & chart accessibility
+
+- **Working localization** — the Language and Timezone preferences now actually
+  drive every date, time and currency in the app (via a shared ambient locale
+  used by the formatting helpers). A new Settings → Appearance "Localization"
+  card exposes language/region and timezone with a live preview; the values
+  persist and apply from first paint after reload.
+- **Accessible charts** — the dashboard charts now include visually-hidden data
+  tables so screen-reader users get the same figures (ticket volume, uptime,
+  spend).
+
 ### Testing — comprehensive e2e coverage
 
 - Expanded the Playwright suite from 16 to **88 tests** covering every module

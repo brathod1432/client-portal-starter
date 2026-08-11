@@ -74,5 +74,6 @@ npm run e2e        # includes axe page scans
 
 ## Known limitations
 
-- Charts (Recharts) expose limited SR semantics; a data-table fallback is
-  recommended for critical metrics in production.
+- Charts (Recharts) expose limited SR semantics, so the dashboard charts now
+  ship with visually-hidden (`sr-only`) data tables carrying the same figures
+  (ticket volume, uptime, spend). Apply the same pattern to any new chart.

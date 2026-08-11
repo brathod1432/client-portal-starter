@@ -104,4 +104,16 @@ test.describe("Settings — appearance", () => {
     await page.getByRole("button", { name: "Large", exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("style", /font-size/);
   });
+
+  test("localization changes how values are formatted", async ({ page }) => {
+    const preview = page.getByTestId("locale-preview");
+    const before = await preview.textContent();
+
+    await page.getByLabel("Timezone").click();
+    await page.getByRole("option", { name: "Asia/Kolkata" }).click();
+    await page.getByLabel("Language / region").click();
+    await page.getByRole("option", { name: "English (India)" }).click();
+
+    await expect(preview).not.toHaveText(before ?? "");
+  });
 });

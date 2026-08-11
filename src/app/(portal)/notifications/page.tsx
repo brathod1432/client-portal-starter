@@ -119,10 +119,13 @@ export default function NotificationsPage() {
         <div className="space-y-2">
           {filtered.map((n) => {
             const Icon = icons[n.type];
-            const body = (
+            // Stretched-link pattern: the clickable overlay and the dismiss
+            // button are siblings (never nested interactives).
+            return (
               <Card
+                key={n.id}
                 className={cn(
-                  "transition-colors",
+                  "focus-within:ring-ring relative transition-colors focus-within:ring-2",
                   !n.read && "border-primary/30 bg-primary/[0.03]",
                 )}
               >
@@ -145,37 +148,30 @@ export default function NotificationsPage() {
                   <button
                     type="button"
                     aria-label="Dismiss notification"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      dismiss(n.id);
-                    }}
-                    className="text-muted-foreground hover:text-foreground focus-visible:ring-ring -mt-1 -mr-1 rounded p-1 focus-visible:ring-2 focus-visible:outline-none"
+                    onClick={() => dismiss(n.id)}
+                    className="text-muted-foreground hover:text-foreground focus-visible:ring-ring relative z-10 -mt-1 -mr-1 rounded p-1 focus-visible:ring-2 focus-visible:outline-none"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </CardContent>
-              </Card>
-            );
 
-            return n.href ? (
-              <Link
-                key={n.id}
-                href={n.href}
-                onClick={() => markRead(n.id)}
-                className="focus-visible:ring-ring block rounded-xl focus-visible:ring-2 focus-visible:outline-none"
-              >
-                {body}
-              </Link>
-            ) : (
-              <button
-                key={n.id}
-                type="button"
-                onClick={() => markRead(n.id)}
-                className="focus-visible:ring-ring block w-full rounded-xl text-left focus-visible:ring-2 focus-visible:outline-none"
-              >
-                {body}
-              </button>
+                {/* Full-card clickable overlay (marks read / navigates) */}
+                {n.href ? (
+                  <Link
+                    href={n.href}
+                    onClick={() => markRead(n.id)}
+                    aria-label={n.title}
+                    className="absolute inset-0 rounded-xl focus:outline-none"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => markRead(n.id)}
+                    aria-label={n.title}
+                    className="absolute inset-0 rounded-xl focus:outline-none"
+                  />
+                )}
+              </Card>
             );
           })}
         </div>

@@ -5,6 +5,21 @@ based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Testing — comprehensive e2e coverage
+
+- Expanded the Playwright suite from 16 to **88 tests** covering every module
+  and function: auth (lockout, register, forgot, password toggle, all roles),
+  dashboard, projects, tickets (SLA, attachments, agent workflow, CSAT, CSV),
+  documents (access/upload/versions), invoices (detail/receipt/pay/CSV),
+  messages (reply/compose), notifications (filters/dismiss/clear), profile
+  (avatar/last sign-in), settings (2FA/password/billing/appearance), help
+  center, activity log, showcase, and the app shell (command palette, shortcuts,
+  help menu, theme, role switcher). Axe accessibility scans now cover all public
+  - 15 portal routes.
+- Accessibility fixes surfaced by the new scans: removed nested-interactive
+  markup on notification cards (stretched-link pattern) and fixed
+  aria-hidden-focus on hidden file inputs (profile avatar, ticket attachments).
+
 ### Added — user-experience round 4
 
 - **Ticket SLA / due dates** — tickets get a resolve-by target from their

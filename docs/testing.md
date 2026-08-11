@@ -42,13 +42,40 @@ npm run screenshots # regenerate docs/screenshots
 - **`<Can>`** — shows/hides content and renders fallback per role.
 - **Accessibility** — jest-axe on Button, PageHeader, StatCard.
 
-### End-to-end (`e2e/`)
+### End-to-end (`e2e/`) — 88 tests across every module
 
-- **auth.spec** — redirect when unauthenticated, invalid-credential error,
-  demo sign-in, sign-out.
+- **auth.spec** — redirect when unauthenticated, generic invalid-credential
+  error, password show/hide toggle, account lockout after repeated failures,
+  sign-in for all four demo roles, sign-out, registration (validation +
+  success), forgot-password confirmation.
+- **dashboard.spec** — KPI widgets, core panels, onboarding checklist dismiss,
+  quick-action + project navigation.
+- **projects.spec** — list, search, status filter, detail + milestones,
+  breadcrumb back.
+- **tickets.spec** — list + SLA overdue indicator, search + status filter, CSV
+  export, create-with-attachment, agent comment/assign/resolve + CSAT rating,
+  RBAC (clients see no agent actions).
+- **documents.spec** — category filter, search, version-history dialog,
+  download, upload (manager) vs. hidden for clients, row-level access.
+- **invoices.spec** — summary, detail dialog with line items, receipt download,
+  CSV export, pay-a-pending-invoice flow.
+- **messages.spec** — list/open thread, reply, start a new conversation.
+- **notifications.spec** — type + unread-only filters, dismiss one, clear all,
+  mark all read.
+- **profile.spec** — identity + last sign-in, save info, avatar upload.
+- **settings.spec** — 2FA setup + recovery codes, change password
+  (reject/accept), data export, sign-out-everywhere, payment methods
+  add/default/remove, auto-pay, theme + text-size.
+- **help-center.spec** — FAQ search, accordion expand, support shortcuts.
+- **activity-log.spec** — client self-scope vs. manager org-wide + CSV export +
+  type filter.
+- **showcase.spec** — all eight industry adaptations render.
+- **shell.spec** — command palette (Ctrl+K + header button), keyboard-shortcuts
+  dialog (`?`), help menu, theme toggle, role-switcher RBAC.
 - **navigation.spec** — traverse primary modules; create a ticket end-to-end.
 - **rbac.spec** — client vs. manager activity-log scoping.
-- **accessibility.spec** — axe scans on key pages.
+- **accessibility.spec** — axe scans (no serious/critical) on all public + 15
+  portal routes.
 - **screenshots.spec** — reference captures (light + dark).
 
 ## Configuration

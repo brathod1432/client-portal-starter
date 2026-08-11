@@ -139,7 +139,8 @@ export default function ProfilePage() {
                 type="file"
                 accept="image/*"
                 className="sr-only"
-                aria-hidden="true"
+                tabIndex={-1}
+                aria-label="Upload profile photo"
                 onChange={onAvatarChange}
               />
             </div>

@@ -232,7 +232,8 @@ export default function NewTicketPage() {
                   type="file"
                   multiple
                   className="sr-only"
-                  aria-hidden="true"
+                  tabIndex={-1}
+                  aria-label="Add ticket attachments"
                   onChange={onFilesSelected}
                 />
                 {attachments.length > 0 ? (
